@@ -34,7 +34,22 @@ import gql from 'graphql-tag'
 
 export default {
     name: 'TeamsComponent',
+    data() {
+        return {
+            loader: null
+        };
+    },
     methods: {
+    },
+    watch: {
+        '$apollo.loading': function (data) {
+            if (data) {
+                this.loader = this.$loading.show();
+            } else {
+                this.loader.hide();
+            }
+
+        }
     },
     apollo: {
         teams: {

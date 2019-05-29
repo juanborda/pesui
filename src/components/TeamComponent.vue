@@ -40,73 +40,53 @@
                     {{teamStats}}
                 </pre>-->
 
-                <v-list two-line="">
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                En total...
-                            </v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                <v-chip label color="orange">Jugó {{teamStats.global.games}} partidos</v-chip>
-                                <v-chip label color="green">Ganó {{teamStats.global.win}} partidos</v-chip>
-                                <v-chip label color="blue">Empató {{teamStats.global.draw}} partidos</v-chip>
-                                <v-chip label color="red">Perdió {{teamStats.global.lost}} partidos</v-chip>
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                De local {{teamStats.home.games}}
-                            </v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                <v-chip label>{{teamStats.home.win}} ganados</v-chip>
-                                <v-chip label>{{teamStats.home.draw}} empatados</v-chip>
-                                <v-chip label>{{teamStats.home.lost}} perdidos</v-chip>
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                De visitante {{teamStats.away.games}}
-                            </v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                <v-chip label>{{teamStats.away.win}} ganados</v-chip>
-                                <v-chip label>{{teamStats.away.draw}} empatados</v-chip>
-                                <v-chip label>{{teamStats.away.lost}} perdidos</v-chip>
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
-
-                <v-list two-line>
-                    <v-list-group>
-                        <template v-slot:activator>
-                            <v-list-tile color="red">
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-list two-line="">
+                            <v-list-tile>
                                 <v-list-tile-content>
-                                    <v-list-tile-title>Ultimos partidos..</v-list-tile-title>
+                                    <v-list-tile-title>
+                                        En total...
+                                    </v-list-tile-title>
+                                    <v-list-tile-sub-title>
+                                        <v-chip label color="orange">{{teamStats.global.games}} partidos</v-chip>
+                                        <v-chip label color="green">{{teamStats.global.win}} ganados</v-chip>
+                                        <v-chip label color="blue">{{teamStats.global.draw}} empatados</v-chip>
+                                        <v-chip label color="red">{{teamStats.global.lost}} perdidos</v-chip>
+                                    </v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
-                        </template>
-                        <template v-for="(result, index) in team.results">
-                            <v-list-tile
-                                    :key="index"
-                                    avatar
-                                    @click=""
-                            >
-                                <v-list-tile-avatar>
-                                </v-list-tile-avatar>
-
+                            <v-list-tile>
                                 <v-list-tile-content>
-                                    <v-list-tile-title v-html="result"></v-list-tile-title>
+                                    <v-list-tile-title>
+                                        De local {{teamStats.home.games}}
+                                    </v-list-tile-title>
+                                    <v-list-tile-sub-title>
+                                        <v-chip label>{{teamStats.home.win}} ganados</v-chip>
+                                        <v-chip label>{{teamStats.home.draw}} empatados</v-chip>
+                                        <v-chip label>{{teamStats.home.lost}} perdidos</v-chip>
+                                    </v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
-                            <v-divider :key="result+index"></v-divider>
-                        </template>
-                    </v-list-group>
-                </v-list>
+                            <v-list-tile>
+
+                                <v-list-tile-content>
+                                    <v-list-tile-title>
+                                        De visitante {{teamStats.away.games}}
+                                    </v-list-tile-title>
+                                    <v-list-tile-sub-title>
+                                        <v-chip label>{{teamStats.away.win}} ganados</v-chip>
+                                        <v-chip label>{{teamStats.away.draw}} empatados</v-chip>
+                                        <v-chip label>{{teamStats.away.lost}} perdidos</v-chip>
+                                    </v-list-tile-sub-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
+                    </v-flex>
+                </v-layout>
+
+                <TeamResultsComponent :results="team.results"></TeamResultsComponent>
+
             </v-card>
         </v-flex>
     </v-layout>
@@ -114,9 +94,11 @@
 
 <script>
 import gql from 'graphql-tag';
+import TeamResultsComponent from "@/components/TeamResultsComponent";
 
 export default {
     name: 'TeamComponent',
+    components: {TeamResultsComponent},
     data () {
         return {
             headers: [
@@ -128,8 +110,19 @@ export default {
                 }
             ],
             team: null,
-            teamStats: null
+            teamStats: null,
+            loader: null
         };
+    },
+    watch: {
+        '$apollo.loading': function (data) {
+            if (data) {
+                this.loader = this.$loading.show();
+            } else {
+                this.loader.hide();
+            }
+
+        }
     },
     computed: {
         teamId() {

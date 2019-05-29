@@ -62,8 +62,19 @@ export default {
                 teamB: null,
                 teamAScore: null,
                 teamBScore: null
-            }
+            },
+            loader: null
         };
+    },
+    watch: {
+        '$apollo.loading': function (data) {
+            if (data) {
+                this.loader = this.$loading.show();
+            } else {
+                this.loader.hide();
+            }
+
+        }
     },
     methods: {
         submit() {
