@@ -32,6 +32,22 @@ export default new Router({
       ]
     },
     {
+      path: '/players',
+      component: () => import('../views/Index'),
+      children: [
+        {
+          path: '',
+          name: 'players.home',
+          component: () => import('../views/Players')
+        },
+        {
+          path: ':id',
+          name: 'players.player',
+          component: () => import('../views/Player')
+        }
+      ]
+    },
+    {
       path: '/add-result',
       name: 'addResult',
       component: () => import('../views/AddResult')

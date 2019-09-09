@@ -23,6 +23,14 @@
                         <v-list-tile-title>Teams</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+                <v-list-tile :to="{name: 'players.home'}">
+                    <v-list-tile-action>
+                        <v-icon>view_list</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Players</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
                 <!--<v-list-tile :to="{name: 'addResult'}">
                     <v-list-tile-action>
                         <v-icon>library_add</v-icon>
