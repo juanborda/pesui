@@ -53,6 +53,11 @@ export default new Router({
       component: () => import('../views/AddResult')
     },
     {
+      path: '/sortea2',
+      name: 'sortea2',
+      component: () => import('../views/Sortea2.vue')
+    },
+    {
       path: '*',
       redirect: '/home'
     }
